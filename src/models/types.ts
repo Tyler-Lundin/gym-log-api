@@ -16,7 +16,6 @@ export interface User extends Document {
 }
 
 export interface Day extends Document {
-    weekday: string;
     date: string; // MM/DD/YYYY
     userId: Schema.Types.ObjectId;
     exercises: [Schema.Types.ObjectId];

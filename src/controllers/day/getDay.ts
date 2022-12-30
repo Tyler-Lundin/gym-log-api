@@ -24,13 +24,17 @@ import { Request, Response } from "express"
 */
 
 const getDay = async ( req: Request, res: Response ) => {
+    // verify user
     const { userId } = req;
-    const { date, weekday } = req.query;
     if (!userId) return res.status(400).json({ message: 'Authorization Error', redirect: '/auth/login' });
-    if (!date) return res.status(400).json({ message: 'Invalid Date' });
-    console.log( { userId, date } );
+
+    // payload validation
+    const { month, day, year } = req.params;
+    if (!month || !day || !year) return res.status(400).json({ message: 'Invalid date ?!' });
+    const date = `${month}/${day}/${year}`;
+
     try {
-        const day = await DayModel.findOne({ userId, date, weekday });
+        const day = await DayModel.findOne({ userId, date });
         if (!day) {
             const newDay = new DayModel({ userId, date });
             if (!newDay) return res.status(500).json({ message: 'Internal Server Error' });

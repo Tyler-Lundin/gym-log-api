@@ -1,17 +1,21 @@
 // src/models/exercise/validateExercise.ts
 // called from src/models/validateEvent.ts
 
+import { Exercise } from "../models/types";
 
-import { Event, Exercise } from '@models/types';
+const validateExercise = ( ExerciseData: { [datakey: string]: any } ) => {
+    const errors: string[] = [];
 
-const ValidateExercise = (ExerciseEvent: any ):ExerciseEvent is Exercise => {
-	const { exercise, weight, reps } = ExerciseEvent;
-	if (!exercise || !weight || !reps) return false;
-	if (typeof exercise !== 'string') return false;
-	if (typeof weight !== 'number') return false;
-	if (typeof reps !== 'number') return false;
-	if (weight < 0 || reps < 0) return false;
-	return true;
+    let { dayId, time, tags, weight, reps, exercise } = ExerciseData;
+    if ( !dayId ) errors.push( 'Day id is required' );
+    if ( !time ) errors.push( 'Time is required' );
+    if ( !tags ) errors.push( 'Tags are required' );
+    if ( !weight ) errors.push( 'Weight is required' );
+    if ( !reps ) errors.push( 'Reps are required' );
+    if ( !exercise ) errors.push( 'Exercise is required' );
+
+    if ( errors.length > 0 ) return { message: `Exercise Data Invalid: ${errors.join(' / ')}`, isValid: false };
+    return { message: 'Exercise Data Valid', isValid: true };
 }
 
-export default ValidateExercise;
+export default validateExercise;

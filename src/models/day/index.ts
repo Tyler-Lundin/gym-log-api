@@ -3,7 +3,6 @@ import { Day } from "../../models/types";
 
 const daySchema = new Schema<Day>(
 	{
-        weekday: { type: String, required: true },
         date: { type: String, required: true },
         userId: { type: String, ref: 'User', required: true },
         exercises: [{ type: Schema.Types.ObjectId, ref: 'Exercise', default: [] }],

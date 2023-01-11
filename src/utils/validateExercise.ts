@@ -1,8 +1,6 @@
 // src/models/exercise/validateExercise.ts
 // called from src/models/validateEvent.ts
 
-import { Exercise } from "../models/types";
-
 const validateExercise = ( ExerciseData: { [datakey: string]: any } ) => {
     const errors: string[] = [];
 

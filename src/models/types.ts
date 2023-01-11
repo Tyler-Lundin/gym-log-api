@@ -1,46 +1,48 @@
-import { Document, Schema } from "mongoose";
+import { Document } from "mongoose";
 
-export interface User extends Document {
+export interface IUser extends Document {
+    username: string;
     email: string;
     password: string;
     sessionId: string; // rotates every time user logs in
-    days: Schema.Types.ObjectId[];
+    days: string[];
+    friends: string[];
+    friendRequests: string[];
+    friendCode: string; // used to add friends
     settings: {
         theme: string;
         language: 'english' | 'spanish' | 'french'
     }
-    stats: Stats;
     createdAt: Date;
     updatedAt: Date;
-    assessments: Schema.Types.ObjectId[];
+    assessments: string[];
 }
 
-export interface Day extends Document {
+export interface IDay extends Document {
     date: string; // MM/DD/YYYY
-    userId: Schema.Types.ObjectId;
-    exercises: [Schema.Types.ObjectId];
-    stats: Stats
+    userId: string;
+    exercises: [string];
+    stats: IStats
     createdAt: Date;
     updatedAt: Date;
 }
 
-export interface Exercise extends Document {
-    dayId: Schema.Types.ObjectId;
-    userId: Schema.Types.ObjectId;
+export interface IExercise extends Document {
+    dayId: string;
+    userId: string;
     time: string; // 04:00 (military)
-    tags: Tag[];
+    tags: ITag[];
     exercise: string;
     weight: number;
     reps: number;
 }
 
-
-export interface Tag {
+export interface ITag {
     label: string;
     color: string;
 }
 
-export interface Stats {
+export interface IStats {
     exercises: {
         [exercise: string]: {
             totalReps: number;
@@ -51,15 +53,33 @@ export interface Stats {
     tags: {
         [label: string]: {
             tagCount: number;
-            tagLocations: [Schema.Types.ObjectId];
+            tagLocations: [string];
         };
     };
 }
 
+export interface IUserGroup extends Document {
+    name: string;
+    users: string
+    leaderboard: [string];
+    createdAt: Date;
+    updatedAt: Date;
+    chat: string;
+}
+
+export interface IFriendRequest extends Document {
+    from: string;
+    to: string;
+    status: 'pending' | 'accepted' | 'rejected';
+    message: string;
+}
+
+
+
 // Everything below this line is just for testing purposes // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 export interface InitialAssessment extends Document {
-    userId: Schema.Types.ObjectId;
+    userId: string;
     assessment: {
         age: number;
         height: number;
@@ -70,8 +90,8 @@ export interface InitialAssessment extends Document {
 };
 
 export interface DayAssessment extends Document {
-    userId: Schema.Types.ObjectId;
-    dayId: Schema.Types.ObjectId;
+    userId: string;
+    dayId: string;
     assessment: {
         weight: number;
         sleep: number;

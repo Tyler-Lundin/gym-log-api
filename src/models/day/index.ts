@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
-import { Day } from "../../models/types";
+import { IDay } from "../../models/types";
 
-const daySchema = new Schema<Day>(
+const daySchema = new Schema<IDay>(
 	{
         date: { type: String, required: true },
         userId: { type: String, ref: 'User', required: true },
@@ -14,6 +14,6 @@ const daySchema = new Schema<Day>(
 	{ collection: 'days', timestamps: true }
 );
 
-const DayModel = model<Day>("Day", daySchema);
+const DayModel = model<IDay>("Day", daySchema);
 
 export default DayModel;

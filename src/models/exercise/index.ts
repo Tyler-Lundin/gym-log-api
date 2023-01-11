@@ -1,8 +1,8 @@
 import { Schema, model } from "mongoose";
-import { Exercise } from "../types";
+import { IExercise } from '../types';
 
 
-const exerciseSchema = new Schema<Exercise>({
+const exerciseSchema = new Schema<IExercise>({
 	dayId: { type: String, ref: 'Day', required: true },
 	userId: { type: String,  ref: 'User', required: true },
 	time: { type: String, required: true },
@@ -12,7 +12,7 @@ const exerciseSchema = new Schema<Exercise>({
 	reps: { type: Number, required: true },
 },{ collection: "exercise", timestamps: true });
 
-const ExerciseModel = model<Exercise>("Exercise", exerciseSchema);
+const ExerciseModel = model<IExercise>("Exercise", exerciseSchema);
 
 export default ExerciseModel;
 

@@ -1,23 +1,25 @@
 import {randomUUID} from "crypto";
 import { Schema, model } from "mongoose";
-import { User } from "@models/types";
+import { IUser } from '../types';
 
-const userSchema = new Schema<User>(
+const userSchema = new Schema<IUser>(
 	{
-		email: { type: String, required: true },
+        username: { type: String, required: true, unique: true, trime: true, default: randomUUID() },
+		email: { type: String, required: true, unique: true, lowercase: true, trime: true },
 		password: { type: String, required: true },
-        sessionId: { type: String, default: randomUUID() },
-        days: [{ type: Schema.Types.ObjectId, ref: 'Day' }],
+        sessionId: { type: String, default: randomUUID(), required: true },
+        days: [{ type: String, ref: 'Day' }],
+        friends: [{ type: String, ref: 'User' }],
+        friendCode: { type: String, default: randomUUID().slice(0, 6) },
+        friendRequests: [{ type: String, ref: 'User' }],
         settings: {
             theme: { type: String, default: 'light' },
             language: { type: String, default: 'english' }
         },
-        stats: {
-            exercises: { type: Object, default: {} },
-            tags: { type: Object, default: {} },
-        }
 	},
 	{ timestamps: true, }
 );
 
-export default model('User', userSchema);
+const UserModel = model('User', userSchema);
+
+export default UserModel;

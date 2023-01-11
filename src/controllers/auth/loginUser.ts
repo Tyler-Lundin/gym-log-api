@@ -1,5 +1,5 @@
 import {  Request, Response } from 'express';
-import User from '../../models/user';
+import UserModel from '../../models/user';
 import comparePassword from '../../utils/comparePassword';
 import generateJWT from '../../utils/generateJWT';
 
@@ -8,11 +8,12 @@ const loginUser = async (req: Request, res: Response) => {
 	try {
 		if ( email === '' || password === '' ) return res.status(400).json({ message: 'Missing Fields' });
 		email = email.toLowerCase();
-		const user = await User.findOne({ email });
+		const user = await UserModel.findOne({ $or: [{ username:email }, { email }] });
 		if ( !user ) return res.status(400).json({ message: 'User not found' });
 		const isMatch = comparePassword(password, user.password)
 		if ( !isMatch ) return res.status(400).json({ message: 'Invalid credentials' });
-		const authToken = generateJWT(user._id, user.sessionId);
+        const uid = String(user._id);
+        const authToken = generateJWT( uid, user.sessionId );
 		return res.status(200).json({
 			authToken,
 			message: 'Authentication successful',
